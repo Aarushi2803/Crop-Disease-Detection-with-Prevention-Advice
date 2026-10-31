@@ -1,0 +1,13 @@
+venv/
+runs/
+train/
+valid/
+test/
+src/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+*.ipynb
+readme.md
+README.md 

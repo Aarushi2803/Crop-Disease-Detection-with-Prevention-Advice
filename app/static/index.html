@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2f6b3f">
+  <title>CropDoc - Leaf Disease Check</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head> 
+<body> 
+  <main class="wrap">
+
+      <header class="top">
+        <h1 class="brand">Crop<span>Doc</span></h1>
+        <p class="tagline">Photograph a leaf. Learn what is wrong and how to fix it.</p>
+      </header>
+
+    <div id="demoBanner" class="demo" hidden>
+      Demo mode: these results are FAKE. Do not use them for real advice.
+    </div>
+
+    
+    <section id="capture" class="panel">
+      
+      <label class="scan-btn" for="cameraInput">
+        <span class="scan-icon" aria-hidden="true">&#127811;</span>
+        <span class="scan-text">Scan a leaf</span>
+        <span class="scan-sub">Opens your camera</span>
+      </label>
+      <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden>
+
+      <label class="link-btn" for="galleryInput">or choose a photo from your gallery</label>
+      <input id="galleryInput" type="file" accept="image/*" hidden>
+
+      <ul class="tips">
+        <li><b>One leaf</b> in the photo</li>
+        <li><b>Daylight</b>, no flash</li>
+        <li><b>Fill the frame</b> with the leaf</li>
+      </ul>
+
+      <!-- Recent scans saved on this phone -->
+      <div id="historyBox" class="history" hidden>
+        <div class="history-head">
+          <h2>Recent scans</h2>
+          <button id="clearHistory" class="text-btn" type="button">Clear</button>
+        </div>
+        <ul id="historyList"></ul>
+      </div>
+    </section>
+
+    <!-- ===== 2. Specimen card: shows the photo while scanning and after ===== -->
+    <section id="stage" class="stage" hidden>
+      <figure class="specimen">
+        <span class="tape tape-l"></span><span class="tape tape-r"></span>
+        <div class="photo-frame">
+          <img id="photo" alt="Your leaf photo">
+          <!-- Moving green line + text, only while the server is thinking -->
+          <div id="scanning" class="scanning" hidden>
+            <div class="scanline"></div>
+            <p>Reading the leaf&hellip;</p>
+          </div>
+        </div>
+      </figure>
+    </section>
+
+    <!-- ===== 3. Error message ===== -->
+    <section id="error" class="panel error" hidden>
+      <h2>Could not check this photo</h2>
+      <p id="errorMsg"></p>
+      <button id="errorBtn" class="btn" type="button">Try again</button>
+    </section>
+
+    <!-- ===== 4. Result card ===== -->
+    <section id="result" class="result" hidden>
+      <div class="label-card">
+        <div class="label-row">
+          <div class="label-text">
+            <p id="crop" class="crop"></p>
+            <h2 id="disease" class="disease"></h2>
+            <span id="chip" class="chip"></span>
+          </div>
+          <!-- Round gauge showing how sure the model is -->
+          <div class="gauge" aria-label="Confidence">
+            <svg viewBox="0 0 120 120" class="ring">
+              <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+              <circle id="ringFg" class="ring-fg" cx="60" cy="60" r="52"></circle>
+            </svg>
+            <span id="confText" class="conf-text"></span>
+          </div>
+        </div>
+
+        <!-- Shown only when the model is NOT sure -->
+        <div id="unsure" class="unsure" hidden>
+          <p>The photo is not clear enough for a reliable answer. Please retake it:</p>
+          <ul>
+            <li>Hold one leaf flat, filling the frame</li>
+            <li>Use daylight and avoid shadows</li>
+            <li>Keep the camera steady and in focus</li>
+          </ul>
+        </div>
+
+        <!-- Top-3 guesses as small bars -->
+        <div class="guesses">
+          <h3 id="guessTitle">Top guesses</h3>
+          <div id="bars"></div>
+        </div>
+      </div>
+
+      <!-- Advice with 3 tabs (hidden when the model is not sure) -->
+      <div id="advice" class="advice">
+        <div class="tabs" role="tablist">
+          <button class="tab active" role="tab" data-tab="why" type="button">Why it happens</button>
+          <button class="tab" role="tab" data-tab="treat" type="button">Treat now</button>
+          <button class="tab" role="tab" data-tab="prevent" type="button">Prevent</button>
+        </div>
+        <div class="tab-panel" id="tab-why">
+          <h4>Cause</h4>
+          <p id="cause"></p>
+          <h4>What you will see</h4>
+          <p id="symptoms"></p>
+        </div>
+        <div class="tab-panel" id="tab-treat" hidden>
+          <ul id="treatList"></ul>
+        </div>
+        <div class="tab-panel" id="tab-prevent" hidden>
+          <ul id="preventList"></ul>
+        </div>
+      </div>
+
+      <p id="disclaimer" class="disclaimer"></p>
+      <button id="againBtn" class="btn" type="button">Scan another leaf</button>
+    </section>
+
+    <footer class="foot">
+      CropDoc is a screening aid, not a replacement for an agricultural expert.
+    </footer>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html> 
