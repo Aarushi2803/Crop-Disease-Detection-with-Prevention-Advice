@@ -1,6 +1,6 @@
    venv/
    train/
-   valid/
+   valid/ 
    test/
    runs/
    backup/
